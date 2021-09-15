@@ -1,7 +1,10 @@
-const Sauce = require('../models/Sauce');
+const Sauce = require('../models/Sauce');// Récupération du modèle 'sauce'
 
+// Récupération du module 'file system' de Node permettant de gérer ici les téléchargements et modifications d'images
 const fs = require('fs')
 
+
+// exprter une fonction Permet de créer une nouvelle sauce
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
@@ -14,6 +17,8 @@ exports.createSauce = (req, res, next) => {
       .catch(error => res.status(400).json({ error }));
 };
 
+
+// exprter une fonction Permet recupere toutes les sauces 
 exports.getAllSauce = (req, res, next) => {
     Sauce.find().then(
       (sauces) => {
@@ -28,6 +33,7 @@ exports.getAllSauce = (req, res, next) => {
     );
 };
 
+// exprter une fonction Permet recupere une sauce specifique 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
       _id: req.params.id
@@ -48,7 +54,7 @@ exports.getOneSauce = (req, res, next) => {
 
 
 
-
+// exprter une fonction Permet modifier une sauce specifique
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ?
       {
@@ -61,13 +67,7 @@ exports.modifySauce = (req, res, next) => {
 };
 
 
-
-
-
-
-
-
-
+// exprter une fonction Permet supprimer une sauce specifique
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
       .then(sauce => {
@@ -84,76 +84,63 @@ exports.deleteSauce = (req, res, next) => {
 
 
 
-/*likes: { type: Number, required: false, default: 0 },
-    dislikes: { type: Number, required: false, default: 0 },
-    usersLiked: { type: [String], required: false },
-    usersDisliked: { type: [String], required: false },  */
+// exprter une fonction Permet de liker ou disliker une sauce specifique
+exports.likeSauce = (req, res, next) => {  
+  Sauce.findOne({_id: req.params.id })
+  .then(sauce => {
+    //L'instruction switch évalue une expression et, selon le résultat obtenu et le cas associé, exécute les instructions correspondantes.
+    switch (req.body.like) {
+      //valeur 1(Like)
+      case -1  :
+        Sauce.updateOne({ _id: req.params.id }, {
+          $inc: {dislikes:1},
+          $push: {usersDisliked: req.body.userId},
+          _id: req.params.id
+      }).then(() => res.status(201).json({ message: 'Dislike ajouté !'}))
+      .catch( error => res.status(400).json({ error }))
+      break; 
+
+      //valeur2:
+
+      case  0 :
+        // premier cas du 2 valeur (dislike)
+        if (sauce.usersLiked.find(user => user === req.body.userId)) {
+          Sauce.updateOne({ _id : req.params.id }, {
+          $inc: {likes:-1},
+          $pull: {usersLiked: req.body.userId},
+          _id: req.params.id
+          }).then(() => res.status(201).json({message: ' Like retiré !'}))
+          .catch( error => res.status(400).json({ error }))
+        }
+        // dexiéme cas du 2 valeur (dislike)
+        if (sauce.usersDisliked.find(user => user === req.body.userId)) {
+          Sauce.updateOne({ _id : req.params.id }, {
+            $inc: {dislikes:-1},
+            $pull: {usersDisliked: req.body.userId},
+            _id: req.params.id
+          }).then(() => res.status(201).json({message: ' Dislike retiré !'}))
+          .catch( error => res.status(400).json({ error }));
+        }      
+      break;
+      //valeur 3(Like)
+      case 1 :
+        Sauce.updateOne({ _id: req.params.id }, {
+          $inc: { likes:1},
+          $push: { usersLiked: req.body.userId},
+          _id: req.params.id
+        }).then(() => res.status(201).json({ message: 'Like ajouté !'}))
+        .catch( error => res.status(400).json({ error }));
+      break;
 
 
+      // valeur 4 par defaut
+      default:
+      return res.status(500).json({ error })
 
-
-exports.likeSauce = (req, res, next) => {
-  
-  Sauce.findOne({
-     _id: req.params.id
- }).then(sauce => {
-     
-     switch (req.body.like) {
-         
-         case -1:
-             Sauce.updateOne({ _id: req.params.id }, {
-                 $inc: {dislikes:1},
-                 $push: {usersDisliked: req.body.userId},
-                 _id: req.params.id
-             })
-                 .then(() => res.status(201).json({ message: 'Dislike ajouté !'}))
-                 .catch( error => res.status(400).json({ error }))
-             break;
-         
-         
-         case 0:
-             //Cas -1 Like :
-             if (sauce.usersLiked.find(user => user === req.body.userId)) {
-                 Sauce.updateOne({ _id : req.params.id }, {
-                     $inc: {likes:-1},
-                     $pull: {usersLiked: req.body.userId},
-                     _id: req.params.id
-                 })
-                     .then(() => res.status(201).json({message: ' Like retiré !'}))
-                     .catch( error => res.status(400).json({ error }))
-             }
-
-             //Cas -1 dislike :
-             if (sauce.usersDisliked.find(user => user === req.body.userId)) {
-                 Sauce.updateOne({ _id : req.params.id }, {
-                     $inc: {dislikes:-1},
-                     $pull: {usersDisliked: req.body.userId},
-                     _id: req.params.id
-                 })
-                     .then(() => res.status(201).json({message: ' Dislike retiré !'}))
-                     .catch( error => res.status(400).json({ error }));
-             }
-             break;
-         
-         //Cas +1 Like :
-         case 1:
-             Sauce.updateOne({ _id: req.params.id }, {
-                 $inc: { likes:1},
-                 $push: { usersLiked: req.body.userId},
-                 _id: req.params.id
-             })
-                 .then(() => res.status(201).json({ message: 'Like ajouté !'}))
-                 .catch( error => res.status(400).json({ error }));
-             break;
-         default:
-             return res.status(500).json({ error });
-     }
- })
- .catch(error => res.status(500).json({ error }))
+    }
+  }).catch(error => res.status(500).json({ error }))
 }
 
-/*L' $incopérateur incrémente un champ d'une valeur spécifiée et a la forme suivante :
 
-{ $inc: { <field1>: <amount1>, <field2>: <amount2>, ... } }
-
-Pour spécifier a <field>dans un document incorporé ou dans un tableau, utilisez la notation par points . */
+       
+  

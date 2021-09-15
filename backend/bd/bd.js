@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+
 const dotenv = require('dotenv').config();
+// connecter a la base de données
 mongoose.connect(    
     `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     { useNewUrlParser: true,

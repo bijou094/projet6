@@ -1,6 +1,8 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');//récupère le package jsonwebtoken
 const TOKEN = process.env.TOKEN;
 
+
+//vérifie le TOKEN de l'utilisateur
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];

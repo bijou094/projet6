@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+//Créer un  schema mangoose pour que les données 
 
 const sauceSchema = mongoose.Schema({
     
@@ -16,4 +17,4 @@ const sauceSchema = mongoose.Schema({
     
 });
 
-module.exports = mongoose.model('Sauce', sauceSchema);
+module.exports = mongoose.model('Sauce', sauceSchema);//// On exporte ce shéma de données, on va donc pouvoir utiliser ce modèle pour intéragir avec l'application

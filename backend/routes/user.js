@@ -1,10 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router();//crée un router
 
 
 const userCtrl = require('../controllers/user');
+const verifyPassword = require('../middleware/verifyPassword');
 
-router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.login);
+router.post('/signup',  verifyPassword,  userCtrl.signup);// Crée un nouvel utilisateur
+router.post('/login', userCtrl.login);// Connecte un utilisateur
 
 module.exports = router;
