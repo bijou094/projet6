@@ -1,13 +1,9 @@
 // importer le package http de node.js pour crée le serveur
 const http = require('http');
-
 // importer la'application app
 const app = require('./app');
-
 //exigez et configurez dotenv
 const dotenv = require('dotenv').config();
-
-
 //la fonction normalizePort renvoie un port valide,( numéro / chaîne ) 
 const normalizePort = val => {
 
@@ -25,13 +21,11 @@ const normalizePort = val => {
   
 };
 
-
 //Ajout du port de connection si celui-ci n'est pas declarer 
 // Si aucun port n'est fourni on écoutera sur le port 3000
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 //attribue le nom du paramètre à la valeur. 
-
 
 const errorHandler = error => {
   if (error.syscall !== 'listen') {

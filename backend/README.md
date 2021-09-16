@@ -13,3 +13,15 @@ peut alors exécuter le serveur avec `Nodemon server`.
 Le serveur doit fonctionner sur `localhost` avec le port par défaut `3000`. Si la
 serveur s'exécute sur un autre port pour une raison quelconque, celui-ci est imprimé sur le
 console au démarrage du serveur, par ex. `Écoute sur le port 3001`.
+il y'aura des variable a ajouter dans le fichier .env 
+```
+PORT = ""
+
+DB_NAME = ""
+DB_USER = ""
+DB_CLUSTER = ""
+DB_PASS = ""
+
+TOKEN = ""
+```
+pensez également a ajouter le dossier images

@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');// attribuer un token à un utilisateur au m
 
 //exporer une fonction pour cree un utilisateur et l'enregistrer dans bd
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, 10)  
     .then(hash => {
       const user = new User({
         email: req.body.email,
@@ -38,8 +38,8 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
               { userId: user._id },
-              'RANDOM_TOKEN_SECRET',
-              { expiresIn: '1h'}
+              process.env.TOKEN,
+              { expiresIn: '24h'}
             )
           });
         })

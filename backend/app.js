@@ -1,32 +1,24 @@
 // importer le express (Framework de node.js pour crée des application express)
 const express = require('express');
 
-
-
-
 const morgan = require('morgan');// importer le package pour  l'enregistreur de requêtes HTTP 
 
 //Dotenv est un module sans dépendance qui charge des variables d'environnement à partir d'un .envfichier dans process.env.
 // permet de cacher les information secret
 const dotenv = require('dotenv').config();
 
-
 const mongoose = require('./bd/bd');// relier la base de données à l'application
 
 const helmet = require('helmet');//Helmet sécurise les  applications Express en définissant divers en-têtes HTTP
-
 
 const userRoutes = require('./routes/user');// la route vers l'utilisateur
 const sauceRoutes = require('./routes/sauce');// la route vers la sauce
 const path = require('path');// chemain vers les fichiers
 
 
-
-
 const bodyParser = require('body-parser');//d'extraire l'objet JSON des requêtes POST
 
 const app = express();//Création d'une application express
-
 
 // contourner les erreurs 
 // tout le monde peut acceder evec les defferent verbs des requête
